@@ -2,9 +2,11 @@ version: "3.8"
 services:
   mongodb:
     container_name: mongo
-    image: mongo:latest
+    image: mongo:7.0
     volumes:
       - ./backend/data:/data
+      - ./backend/data/seed.sh:/docker-entrypoint-initdb.d/seed.sh
+      - ./backend/data/sample_posts.json:/docker-entrypoint-initdb.d/sample_posts.json
     ports:
       - "27017:27017"
 
@@ -35,5 +37,3 @@ services:
     depends_on:
       - mongodb
 
-volumes:
-  data:

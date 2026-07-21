@@ -25,6 +25,14 @@ function header() {
             >
               Create post
             </button>
+			<button
+              className="active:scale-click hidden rounded border border-slate-50 px-4 py-2 hover:bg-slate-500/25 md:inline-block"
+              onClick={() => {
+                navigate('/signin');
+              }}
+            >
+              Sign In
+            </button>
             <button
               className="px-2 py-2 hover:bg-slate-500/25 md:hidden"
               onClick={() => {
