@@ -1,0 +1,43 @@
+version: "3.8"
+services:
+  mongodb:
+    container_name: mongo
+    image: mongo:7.0
+    volumes:
+      - mongo_data:/data/db
+      - ./backend/data/seed.sh:/docker-entrypoint-initdb.d/seed.sh
+      - ./backend/data/sample_posts.json:/docker-entrypoint-initdb.d/sample_posts.json
+    ports:
+      - "27017:27017"
+
+  backend:
+    container_name: backend
+    build: ./backend
+    env_file:
+      - ./backend/.env.docker
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongodb
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      args:
+        VITE_API_PATH: "http://98.80.178.4:5000"
+    env_file:
+      - ./frontend/.env.docker
+    ports:
+      - "80:80"
+
+  redis:
+    container_name: redis
+    restart: unless-stopped
+    image: redis:7.0.5-alpine 
+    expose:
+        - 6379
+    depends_on:
+      - mongodb
+volumes:
+  mongo_data:
