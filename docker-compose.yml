@@ -22,11 +22,14 @@ services:
 
   frontend:
     container_name: frontend
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        VITE_API_PATH: "http://98.80.178.4:5000"
     env_file:
       - ./frontend/.env.docker
     ports:
-      - "5173:5173"
+      - "80:80"
 
   redis:
     container_name: redis

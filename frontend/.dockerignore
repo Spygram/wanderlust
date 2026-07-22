@@ -1,0 +1,38 @@
+# Dependencies (reinstalled via npm ci inside the image)
+node_modules
+
+# Env files — not needed in image; Vite only uses build ARGs
+.env
+.env.sample
+.env.docker
+
+# Git
+.git
+.gitignore
+
+# Docker files
+Dockerfile
+Dockerfile_0
+Dockerfile.save
+docker-compose.yml
+
+# Editor/OS cruft
+.vscode
+.idea
+*.log
+.DS_Store
+
+# Build output (regenerated fresh each build, don't want stale local dist copied in)
+dist
+
+# Tests
+jest.config.ts
+src/__tests__
+
+# Configs not needed at runtime
+.eslintrc.cjs
+.eslintignore
+.prettierrc
+.prettierignore
+.babelrc
+vercel.json
