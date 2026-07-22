@@ -4,7 +4,7 @@ FROM node:21 AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 COPY . .
 ARG VITE_API_PATH

@@ -27,7 +27,6 @@ dist
 
 # Tests
 jest.config.ts
-src/__tests__
 
 # Configs not needed at runtime
 .eslintrc.cjs
