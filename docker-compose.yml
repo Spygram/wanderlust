@@ -25,9 +25,9 @@ services:
     build:
       context: ./frontend
       args:
-        VITE_API_PATH: "http://98.80.178.4:5000"
-    env_file:
-      - ./frontend/.env.docker
+        VITE_API_PATH: "http://32.197.217.12:5000"
+#    env_file:
+ #     - ./frontend/.env.docker
     ports:
       - "80:80"
 
