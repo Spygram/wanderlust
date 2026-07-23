@@ -23,7 +23,7 @@ pipeline {
             steps {
                 echo 'Building backend Docker image...'
                 // Builds and tags the image using your variables
-                sh "docker build -t ${IMAGE_REPO}/wanderlust_backend:${IMAGE_TAG} -t ${IMAGE_REPO}/backend:latest ./backend"
+                sh "docker build -t ${IMAGE_REPO}/wanderlust_backend:${IMAGE_TAG} -t ${IMAGE_REPO}/wanderlust_backend:latest ./backend"
                 sh "docker push ${IMAGE_REPO}/wanderlust_backend:${IMAGE_TAG}"
                 sh "docker push ${IMAGE_REPO}/wanderlust_backend:latest"
             }
