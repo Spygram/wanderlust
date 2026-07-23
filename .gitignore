@@ -8,3 +8,12 @@ coverage/
 backend/dist
 package-lock.json
 0_*
+*.pem
+.env
+# terraform/.gitignore
+.terraform/
+*.tfstate
+*.tfstate.*
+.env
+*.tfvars
+crash.log

@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    environment {
+        // Define your Docker Hub repository and image tags
+        IMAGE_REPO = 'spygram' // Replace with your actual Docker Hub username/org
+        IMAGE_TAG  = "0.0.${env.BUILD_NUMBER}"    // Uses the Jenkins build number as the unique tag
+    }
+
+    stages {
+        stage('Login to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub_credential', 
+                                                  usernameVariable: 'USERNAME', 
+                                                  passwordVariable: 'PASSWORD')]) {
+                    sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
+                    echo 'Logged in successfully'
+                }
+            }
+        }
+
+        stage('Docker build') {
+            steps {
+                echo 'Building backend Docker image...'
+                // Builds and tags the image using your variables
+                sh "docker build -t ${IMAGE_REPO}/backend:${IMAGE_TAG} -t ${IMAGE_REPO}/backend:latest ./backend"
+                sh "docker push ${IMAGE_REPO}/backend:${IMAGE_TAG}"
+                sh "docker push ${IMAGE_REPO}/backend:latest"
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Backend build and push completed successfully!'
+        }
+        failure {
+            echo 'Backend pipeline failed. Check logs.'
+        }
+    }
+}
