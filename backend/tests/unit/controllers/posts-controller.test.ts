@@ -78,13 +78,13 @@ describe('createPostHandler', () => {
     const postObject = createPostObject();
     const req: any = createRequestObject({ body: postObject });
 
-    jest.spyOn(Post.prototype, 'save').mockImplementationOnce(() => Promise.resolve(postObject));
+    jest.spyOn(Post.prototype, 'save').mockRejectedValueOnce(new Error('Database error'));
 
     await createPostHandler(req, res);
 
     expect(res.status).toHaveBeenCalledWith(HTTP_STATUS.INTERNAL_SERVER_ERROR);
     expect(res.json).toHaveBeenCalledWith({
-      message: RESPONSE_MESSAGES.COMMON.INTERNAL_SERVER_ERROR,
+      message: 'Database error',
     });
   });
 });
@@ -236,7 +236,7 @@ describe('getPostByIdHandler', () => {
 
     const mockPost: any = createPostObject({ _id: '6910293383' });
 
-    jest.spyOn(Post, 'find').mockResolvedValueOnce(mockPost);
+    jest.spyOn(Post, 'findById').mockResolvedValueOnce(mockPost);
 
     await getPostByIdHandler(req, res);
 
@@ -344,9 +344,7 @@ describe('deletePostByIdHandler', () => {
 
     // Mock the behavior of Post.findByIdAndRemove
 
-    jest
-      .spyOn(Post, 'findByIdAndDelete')
-      .mockRejectedValueOnce(new Error(RESPONSE_MESSAGES.COMMON.INTERNAL_SERVER_ERROR));
+    jest.spyOn(Post, 'findByIdAndDelete').mockResolvedValueOnce(null);
 
     await deletePostByIdHandler(req, res);
 
@@ -357,7 +355,6 @@ describe('deletePostByIdHandler', () => {
   it('Delete Post: Failure - Internal Server Error', async () => {
     const req: any = createRequestObject({ params: { id: '6910293383' } });
 
-    // Mock the behavior of Post.findByIdAndRemove
     jest
       .spyOn(Post, 'findByIdAndDelete')
       .mockRejectedValueOnce(new Error(RESPONSE_MESSAGES.COMMON.INTERNAL_SERVER_ERROR));

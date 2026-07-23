@@ -1,4 +1,4 @@
-import mongoose, { AnyArray } from 'mongoose';
+import mongoose from 'mongoose';
 import { MONGODB_URI } from './utils.js';
 
 export default async function connectDB() {

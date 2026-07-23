@@ -13,6 +13,7 @@ const EditBlog = () => {
   const { postId } = useParams();
 
   const userData = useAuthData();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getPostById = async () => {
@@ -28,13 +29,18 @@ const EditBlog = () => {
     if (post === undefined || post !== state?.post) {
       getPostById();
     }
-  }, [state?.post]);
+  }, [post, postId, state?.post]);
 
-  const navigate = useNavigate();
-
-  if (userData?.role === 'USER' && post?.authorId !== userData?._id) {
-    navigate(-1);
-  }
+  useEffect(() => {
+    if (
+      !loading &&
+      userData?.role === 'USER' &&
+      post?.authorId &&
+      String(post.authorId) !== String(userData?._id)
+    ) {
+      navigate(-1);
+    }
+  }, [loading, userData?.role, userData?._id, post?.authorId, navigate]);
 
   if (!loading) {
     return (

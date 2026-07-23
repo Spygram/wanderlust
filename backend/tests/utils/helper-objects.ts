@@ -29,14 +29,20 @@ export const createPostObject = (options: OptionsObject = {}): OptionsObject => 
 interface RequestOptions {
   body?: Record<string, any>;
   params?: Record<string, any>;
+  user?: { _id: string; role?: string };
 }
 
 export const createRequestObject = (
   options: RequestOptions = {}
-): { body: Record<string, any>; params: Record<string, any> } => {
+): {
+  body: Record<string, any>;
+  params: Record<string, any>;
+  user: { _id: string; role?: string };
+} => {
   return {
     body: options.body || {},
     params: options.params || {},
+    user: options.user || { _id: 'test-user-id', role: 'USER' },
   };
 };
 

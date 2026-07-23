@@ -5,12 +5,13 @@ import LatestPostCard from '@/components/latest-post-card';
 import { FeaturedPostCardSkeleton } from '@/components/skeletons/featured-post-card-skeleton';
 import { LatestPostCardSkeleton } from '@/components/skeletons/latest-post-card-skeleton';
 import CategoryPill from '@/components/category-pill';
+import Post from '@/types/post-type';
 import { categories } from '@/utils/category-colors';
 
 export default function BlogFeed() {
   const [selectedCategory, setSelectedCategory] = useState('featured');
-  const [posts, setPosts] = useState([]);
-  const [latestPosts, setLatestPosts] = useState([]);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [latestPosts, setLatestPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -59,9 +60,7 @@ export default function BlogFeed() {
               ? Array(5)
                   .fill(0)
                   .map((_, index) => <FeaturedPostCardSkeleton key={index} />)
-              : posts
-                  .slice(0, 5)
-                  .map((post, index) => <FeaturedPostCard key={index} post={post} />)}
+              : posts.slice(0, 5).map((post) => <FeaturedPostCard key={post._id} post={post} />)}
           </div>
         </div>
         <div className="w-full p-4 sm:w-1/3">
@@ -102,7 +101,7 @@ export default function BlogFeed() {
                     .map((_, index) => <LatestPostCardSkeleton key={index} />)
                 : latestPosts
                     .slice(0, 5)
-                    .map((post, index) => <LatestPostCard key={index} post={post} />)}
+                    .map((post) => <LatestPostCard key={post._id} post={post} />)}
             </div>
           </div>
         </div>

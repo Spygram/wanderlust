@@ -12,7 +12,7 @@ const maxAge =
 const validMaxAge = isNaN(maxAge) ? defaultMaxAge : maxAge;
 export const cookieOptions: CookieObject = {
   httpOnly: true,
-  sameSite: NODE_ENV === 'Development' ? 'lax' : 'none',
-  secure: NODE_ENV === 'Development' ? false : true,
+  sameSite: NODE_ENV === 'development' ? 'lax' : 'none',
+  secure: NODE_ENV === 'development' ? false : true,
   maxAge: validMaxAge,
 };

@@ -26,7 +26,7 @@ export const changeUserRoleHandler = async (req: Request, res: Response) => {
           .status(HTTP_STATUS.NOT_FOUND)
           .json({ message: RESPONSE_MESSAGES.USERS.USER_NOT_EXISTS });
       user.role = role;
-      user.save();
+      await user.save();
     } else {
       return res
         .status(HTTP_STATUS.BAD_REQUEST)
@@ -49,7 +49,7 @@ export const deleteUserHandler = async (req: Request, res: Response) => {
       return res
         .status(HTTP_STATUS.NOT_FOUND)
         .json({ message: RESPONSE_MESSAGES.USERS.USER_NOT_EXISTS });
-    res.status(HTTP_STATUS.NO_CONTENT).json({ message: RESPONSE_MESSAGES.USERS.DELETED });
+    res.status(HTTP_STATUS.NO_CONTENT).send();
   } catch (error) {
     console.log(error);
     res

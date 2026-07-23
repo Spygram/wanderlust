@@ -33,6 +33,11 @@ router.get('/categories/:category', getPostByCategoryHandler);
 
 // Route for fetching the latest posts
 router.get('/latest', cacheHandler(REDIS_KEYS.LATEST_POSTS), getLatestPostsHandler);
+
+// Admin routes must be registered before /:id to avoid "admin" being treated as an id
+router.patch('/admin/:id', authMiddleware, isAdminMiddleware, updatePostHandler);
+router.delete('/admin/:id', authMiddleware, isAdminMiddleware, deletePostByIdHandler);
+
 // Get a specific post by ID
 router.get('/:id', getPostByIdHandler);
 
@@ -41,11 +46,5 @@ router.patch('/:id', authMiddleware, isAuthorMiddleware, updatePostHandler);
 
 // Delete a post by ID
 router.delete('/:id', authMiddleware, isAuthorMiddleware, deletePostByIdHandler);
-
-// Update a post by admin with ID
-router.patch('/admin/:id', authMiddleware, isAdminMiddleware, updatePostHandler);
-
-// Delete a post by admin with ID
-router.delete('/admin/:id', authMiddleware, isAdminMiddleware, deletePostByIdHandler);
 
 export default router;

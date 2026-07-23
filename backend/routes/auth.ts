@@ -25,7 +25,7 @@ router.get(
   (req: Request, res: Response) => {
     let token = '';
     if (process.env.JWT_SECRET) {
-      token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      token = jwt.sign({ _id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     }
     res.cookie('access_token', token, {
       httpOnly: true,
@@ -51,6 +51,6 @@ router.get('/check', authMiddleware, (req, res) => {
 router.post('/signout', authMiddleware, signOutUser);
 
 //CHECK USER STATUS
-router.get('/check/:_id', authMiddleware, isLoggedIn);
+router.get('/check/:_id', isLoggedIn);
 
 export default router;

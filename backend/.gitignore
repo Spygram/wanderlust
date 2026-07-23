@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage/
+
+# OS/editor cruft
+.DS_Store
+.vscode/
+.idea/
+
+# TypeScript build info
+*.tsbuildinfo

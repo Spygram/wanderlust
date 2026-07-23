@@ -11,8 +11,7 @@ export const isAuthorMiddleware = async (req: Request, res: Response, next: Next
       return res.status(HTTP_STATUS.NOT_FOUND).json({ message: RESPONSE_MESSAGES.POSTS.NOT_FOUND });
     }
 
-    console.log(post.authorId, userId);
-    if (post.authorId.toString() !== userId) {
+    if (post.authorId.toString() !== userId.toString()) {
       return res
         .status(HTTP_STATUS.FORBIDDEN)
         .json({ message: RESPONSE_MESSAGES.POSTS.NOT_ALLOWED });

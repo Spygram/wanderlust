@@ -1,36 +1,19 @@
-# Dependencies (reinstalled via npm ci inside the image)
 node_modules
-
-# Env files with secrets — don't want these baked into image layers
-.env
-.env.sample
-.env.docker
-
-# Local data / seed files not needed at runtime (already mounted via volume in compose)
-data
-
-# Git
+dist
 .git
 .gitignore
-
-# Docker files (no need to copy these into build context)
-Dockerfile
-Dockerfile_0
-docker-compose.yml
-
-# Editor/OS cruft
-.vscode
-.idea
-*.log
-.DS_Store
-
-# Tests — optional, exclude if you don't run tests inside the image
+.env
+.env.*
+!.env.example
 tests
-
-# Misc configs not needed at runtime
+*.log
 .eslintrc.json
-.eslintignore
+eslint.config.mjs
 .prettierrc
 .prettierignore
 .babelrc
 vercel.json
+Dockerfile
+Jenkinsfile
+coverage
+.husky

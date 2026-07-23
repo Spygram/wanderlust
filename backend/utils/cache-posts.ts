@@ -27,7 +27,7 @@ export async function storeDataInCache(key: any, data: any) {
 export async function deleteDataFromCache(key: any): Promise<void> {
   if (!isRedisEnabled()) return; // Skip cache if Redis is not available
   const cacheKey = `${REDIS_PREFIX}:${key}`;
-  if (getRedisClient().exists(cacheKey)) {
+  if (await getRedisClient().exists(cacheKey)) {
     await getRedisClient().del(cacheKey);
   }
 }

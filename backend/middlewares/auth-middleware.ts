@@ -9,11 +9,11 @@ import { Request, Response, NextFunction } from 'express';
 import { ObjectId } from 'mongoose';
 
 interface JwtPayload {
-  id: ObjectId;
+  _id: ObjectId;
 }
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-  const token = await req.cookies.access_token;
+  const token = req.cookies.access_token;
   if (!token) {
     return next(
       new ApiError({
@@ -24,8 +24,8 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
   }
 
   try {
-    const { id } = jwt.verify(token, JWT_SECRET as string) as JwtPayload;
-    req.user = await User.findById(id);
+    const { _id } = jwt.verify(token, JWT_SECRET as string) as JwtPayload;
+    req.user = await User.findById(_id);
     next();
   } catch (error: any) {
     console.log('Token verification error:', error);
@@ -41,10 +41,12 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
 export const isAdminMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   const role = req.user.role;
   if (role !== Role.Admin) {
-    return new ApiError({
-      status: HTTP_STATUS.UNAUTHORIZED,
-      message: RESPONSE_MESSAGES.USERS.UNAUTHORIZED_USER,
-    });
+    return next(
+      new ApiError({
+        status: HTTP_STATUS.UNAUTHORIZED,
+        message: RESPONSE_MESSAGES.USERS.UNAUTHORIZED_USER,
+      })
+    );
   }
   next();
 };

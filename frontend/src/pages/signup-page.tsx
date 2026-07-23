@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import AddGoogleIcon from '@/assets/svg/google-color-icon.svg';
 // import AddGithubIcon from '@/assets/svg/github-icon.svg';
 import { useForm } from 'react-hook-form';
@@ -16,6 +16,7 @@ import EyeIcon from '@/assets/svg/eye.svg';
 import EyeOffIcon from '@/assets/svg/eye-off.svg';
 function Signup() {
   const navigate = useNavigate();
+  const location = useLocation();
   const {
     register,
     handleSubmit,
@@ -95,7 +96,7 @@ function Signup() {
     };
 
     handleGoogleCallback();
-  }, [location, navigate]);
+  }, [location.search, navigate]);
 
   const handleGoogleLogin = () => {
     window.location.href = `${import.meta.env.VITE_API_PATH}/api/auth/google`;
@@ -163,7 +164,7 @@ function Signup() {
               className="absolute inset-y-0 right-0 flex items-center pr-3 text-sm leading-5"
             >
               <img
-                src={passwordVisible ? EyeOffIcon : EyeIcon}
+                src={passwordVisible ? EyeIcon : EyeOffIcon}
                 alt="Toggle Password Visibility"
                 className="h-5 w-5"
               />
@@ -186,7 +187,7 @@ function Signup() {
               className="absolute inset-y-0 right-0 flex items-center pr-3 text-sm leading-5"
             >
               <img
-                src={passwordVisible ? EyeOffIcon : EyeIcon}
+                src={passwordVisible ? EyeIcon : EyeOffIcon}
                 alt="Toggle Confirm Password Visibility"
                 className="h-5 w-5"
               />

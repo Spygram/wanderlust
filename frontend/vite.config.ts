@@ -12,11 +12,7 @@ export default defineConfig({
       provider: 'v8',
     },
     reporters: ['verbose'],
-    exclude: [
-      ...configDefaults.exclude,
-      './src/__tests__/integration-test/home.test.tsx',
-      './src/__tests__/App.test.tsx',
-    ],
+    exclude: [...configDefaults.exclude],
 
     setupFiles: './test-setup.ts',
   },

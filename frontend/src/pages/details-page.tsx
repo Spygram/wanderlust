@@ -65,12 +65,14 @@ export default function DetailsPage() {
         console.log(error);
       }
     };
-    if (post === undefined || post !== state.post) {
+    if (post === undefined || post !== state?.post) {
       getPostById();
     }
-  }, [state.post]);
+  }, [post, postId, state?.post]);
 
   useEffect(() => {
+    if (!post?.categories?.length) return;
+
     const fetchRelatedCategoryPosts = async () => {
       try {
         setRelatedPostsLoading(true);
@@ -86,7 +88,7 @@ export default function DetailsPage() {
       }
     };
     fetchRelatedCategoryPosts();
-  }, [post.categories]);
+  }, [post?.categories]);
 
   if (!loading)
     return (

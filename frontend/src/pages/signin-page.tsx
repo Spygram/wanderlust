@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import AddGoogleIcon from '@/assets/svg/google-color-icon.svg';
 // import AddGithubIcon from '@/assets/svg/github-icon.svg';
 import { useForm } from 'react-hook-form';
@@ -16,6 +16,7 @@ import EyeIcon from '@/assets/svg/eye.svg';
 import EyeOffIcon from '@/assets/svg/eye-off.svg';
 function signin() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const toastShownRef = useRef(false);
   const {
@@ -100,7 +101,7 @@ function signin() {
     };
 
     handleGoogleCallback();
-  }, [location, navigate]);
+  }, [location.search, navigate]);
 
   const handleGoogleLogin = () => {
     window.location.href = `${import.meta.env.VITE_API_PATH}/api/auth/google`;

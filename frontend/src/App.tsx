@@ -10,18 +10,16 @@ import AdminUsers from '@/pages/admin-users';
 import AdminBlogs from '@/pages/admin-blogs';
 import NotFound from '@/pages/not-found';
 import UnprotectedRoute from './components/unprotected-route';
-import { useLayoutEffect } from 'react';
-import RequireAuth from './components/require-auth-blog';
+import RequireAuth from './components/require-auth';
 import RequireAuthBlog from './components/require-auth-blog';
 import useThemeClass from './utils/theme-changer';
 import AdminContainer from './components/admin-container';
-import { Role } from './types/role-type.tsx';
-import EditBlog from './pages/edit-blog.tsx';
+import { Role } from './types/role-type';
+import EditBlog from './pages/edit-blog';
+
+useThemeClass();
 
 function App() {
-  useLayoutEffect(() => {
-    useThemeClass();
-  }, []);
   return (
     <BrowserRouter>
       <ScrollToTop />

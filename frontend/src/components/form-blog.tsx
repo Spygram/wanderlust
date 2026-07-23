@@ -147,7 +147,7 @@ function FormBlog({ type, postId, post }: FormBlogPropType) {
             />
           </div>
           <h2 className="cursor-text text-lg font-semibold text-light-primary dark:text-dark-primary sm:text-xl lg:text-2xl">
-            Create Blog
+            {type === 'edit' ? 'Edit Blog' : 'Create Blog'}
           </h2>
         </div>
       </div>

@@ -15,7 +15,7 @@ const app = express();
 app.use(
   cors({
     // added origin
-    origin: [FRONTEND_URL as string, 'http://localhost:3000'],
+    origin: [FRONTEND_URL as string, 'http://localhost:3000', 'http://localhost:5173'],
     credentials: true,
   })
 );
@@ -23,7 +23,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression());
-app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'secret',
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 

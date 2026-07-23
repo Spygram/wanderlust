@@ -2,20 +2,7 @@ import Post from '../models/post.js';
 import User from '../models/user.js';
 import { deleteDataFromCache, storeDataInCache } from '../utils/cache-posts.js';
 import { HTTP_STATUS, REDIS_KEYS, RESPONSE_MESSAGES, validCategories } from '../utils/constants.js';
-type Request = {
-  body: any;
-  params: Record<string, any>;
-  query: Record<string, any>;
-  user?: any;
-};
-
-type Response = {
-  status: (status: number) => Response;
-  json: (body: any) => Response;
-};
-
-type NextFunction = (...args: any[]) => any;
-
+import { Request, Response, NextFunction } from 'express';
 export const createPostHandler = async (req: Request, res: Response) => {
   try {
     const {
@@ -72,7 +59,7 @@ export const createPostHandler = async (req: Request, res: Response) => {
 
     res.status(HTTP_STATUS.OK).json(savedPost);
   } catch (err: any) {
-    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: err });
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: err.message });
   }
 };
 
@@ -149,10 +136,10 @@ export const updatePostHandler = async (req: Request, res: Response) => {
       return res.status(HTTP_STATUS.NOT_FOUND).json({ message: RESPONSE_MESSAGES.POSTS.NOT_FOUND });
     }
     // invalidate the redis cache
-    (await deleteDataFromCache(REDIS_KEYS.ALL_POSTS),
-      await deleteDataFromCache(REDIS_KEYS.FEATURED_POSTS),
-      await deleteDataFromCache(REDIS_KEYS.LATEST_POSTS),
-      await res.status(HTTP_STATUS.OK).json(updatedPost));
+    await deleteDataFromCache(REDIS_KEYS.ALL_POSTS);
+    await deleteDataFromCache(REDIS_KEYS.FEATURED_POSTS);
+    await deleteDataFromCache(REDIS_KEYS.LATEST_POSTS);
+    res.status(HTTP_STATUS.OK).json(updatedPost);
   } catch (err: any) {
     res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: err.message });
   }
@@ -169,10 +156,10 @@ export const deletePostByIdHandler = async (req: Request, res: Response) => {
     await User.findByIdAndUpdate(post.authorId, { $pull: { posts: req.params.id } });
 
     // invalidate the redis cache
-    (await deleteDataFromCache(REDIS_KEYS.ALL_POSTS),
-      await deleteDataFromCache(REDIS_KEYS.FEATURED_POSTS),
-      await deleteDataFromCache(REDIS_KEYS.LATEST_POSTS),
-      res.status(HTTP_STATUS.OK).json({ message: RESPONSE_MESSAGES.POSTS.DELETED }));
+    await deleteDataFromCache(REDIS_KEYS.ALL_POSTS);
+    await deleteDataFromCache(REDIS_KEYS.FEATURED_POSTS);
+    await deleteDataFromCache(REDIS_KEYS.LATEST_POSTS);
+    res.status(HTTP_STATUS.OK).json({ message: RESPONSE_MESSAGES.POSTS.DELETED });
   } catch (err: any) {
     res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: err.message });
   }
@@ -182,12 +169,17 @@ export const getRelatedPostsByCategories = async (req: Request, res: Response) =
   const { categories } = req.query;
   if (!categories) {
     return res
-      .status(HTTP_STATUS.NOT_FOUND)
+      .status(HTTP_STATUS.BAD_REQUEST)
       .json({ message: RESPONSE_MESSAGES.POSTS.INVALID_CATEGORY });
   }
   try {
+    const categoryList = Array.isArray(categories)
+      ? categories
+      : String(categories)
+          .split(',')
+          .map((c) => c.trim());
     const filteredCategoryPosts = await Post.find({
-      categories: { $in: categories },
+      categories: { $in: categoryList },
     });
     res.status(HTTP_STATUS.OK).json(filteredCategoryPosts);
   } catch (err: any) {
