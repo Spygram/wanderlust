@@ -6,7 +6,6 @@ backend/node_modules
 coverage/
 .idea/
 backend/dist
-package-lock.json
 0_*
 *.pem
 .env
