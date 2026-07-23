@@ -37,7 +37,7 @@ variable "private_subnet_cidrs" {
 variable "instance_type" {
   description = "EC2 instance size for the application web servers"
   type        = string
-  default     = "t2.micro"
+  default     = "t3.medium"
 }
 
 # variable "target_env" {
