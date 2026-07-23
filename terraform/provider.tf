@@ -15,10 +15,10 @@ terraform {
       version = "4.3.0"
     }
 
-    # cloudflare = {
-    #   source  = "cloudflare/cloudflare"
-    #   version = "5.17.0"
-    # }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "5.17.0"
+    }
   }
 
   backend "s3" {

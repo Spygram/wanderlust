@@ -1,5 +1,8 @@
-import User from '../models/user.js';
+// If 'jsonwebtoken' types are not installed, provide an ambient module
+// declaration to avoid TypeScript errors about missing type declarations.
+declare module 'jsonwebtoken';
 import jwt from 'jsonwebtoken';
+import User from '../models/user.js';
 import { HTTP_STATUS, RESPONSE_MESSAGES } from '../utils/constants.js';
 import { cookieOptions } from '../utils/cookie_options.js';
 import { JWT_SECRET } from '../config/utils.js';

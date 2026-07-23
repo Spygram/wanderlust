@@ -79,3 +79,19 @@ variable "instance_type" {
 #   type        = string
 #   default     = "pplmgtdb"
 # }
+
+# ==========================================
+# 5. CLOUDFLARE VARIABLES
+# ==========================================
+
+variable "cloudflare_zone_id" {
+  description = "Cloudflare Zone ID for the domain"
+  type        = string
+  default     = "PASTE_YOUR_CLOUDFLARE_ZONE_ID_HERE"
+}
+
+variable "cloudflare_api_token" {
+  description = "Cloudflare API Token with DNS edit permissions"
+  type        = string
+  default     = "PASTE_YOUR_CLOUDFLARE_API_TOKEN_HERE"
+}

@@ -2,7 +2,20 @@ import Post from '../models/post.js';
 import User from '../models/user.js';
 import { deleteDataFromCache, storeDataInCache } from '../utils/cache-posts.js';
 import { HTTP_STATUS, REDIS_KEYS, RESPONSE_MESSAGES, validCategories } from '../utils/constants.js';
-import { Request, Response, NextFunction } from 'express';
+type Request = {
+  body: any;
+  params: Record<string, any>;
+  query: Record<string, any>;
+  user?: any;
+};
+
+type Response = {
+  status: (status: number) => Response;
+  json: (body: any) => Response;
+};
+
+type NextFunction = (...args: any[]) => any;
+
 export const createPostHandler = async (req: Request, res: Response) => {
   try {
     const {
@@ -136,10 +149,10 @@ export const updatePostHandler = async (req: Request, res: Response) => {
       return res.status(HTTP_STATUS.NOT_FOUND).json({ message: RESPONSE_MESSAGES.POSTS.NOT_FOUND });
     }
     // invalidate the redis cache
-    await deleteDataFromCache(REDIS_KEYS.ALL_POSTS),
+    (await deleteDataFromCache(REDIS_KEYS.ALL_POSTS),
       await deleteDataFromCache(REDIS_KEYS.FEATURED_POSTS),
       await deleteDataFromCache(REDIS_KEYS.LATEST_POSTS),
-      await res.status(HTTP_STATUS.OK).json(updatedPost);
+      await res.status(HTTP_STATUS.OK).json(updatedPost));
   } catch (err: any) {
     res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: err.message });
   }
@@ -156,10 +169,10 @@ export const deletePostByIdHandler = async (req: Request, res: Response) => {
     await User.findByIdAndUpdate(post.authorId, { $pull: { posts: req.params.id } });
 
     // invalidate the redis cache
-    await deleteDataFromCache(REDIS_KEYS.ALL_POSTS),
+    (await deleteDataFromCache(REDIS_KEYS.ALL_POSTS),
       await deleteDataFromCache(REDIS_KEYS.FEATURED_POSTS),
       await deleteDataFromCache(REDIS_KEYS.LATEST_POSTS),
-      res.status(HTTP_STATUS.OK).json({ message: RESPONSE_MESSAGES.POSTS.DELETED });
+      res.status(HTTP_STATUS.OK).json({ message: RESPONSE_MESSAGES.POSTS.DELETED }));
   } catch (err: any) {
     res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: err.message });
   }
