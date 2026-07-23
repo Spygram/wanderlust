@@ -8,7 +8,7 @@ interface ApiErrorParams {
   stack?: string;
 }
 
-class ApiError extends MongooseError {
+class ApiError extends Error {
   public status: number;
   public data: null;
   public success: boolean;

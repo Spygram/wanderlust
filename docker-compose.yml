@@ -24,10 +24,10 @@ services:
     container_name: frontend
     build:
       context: ./frontend
-      args:
-        VITE_API_PATH: "http://32.197.217.12:5000"
-#    env_file:
- #     - ./frontend/.env.docker
+ #     args:
+  #      VITE_API_PATH: "http://3.91.19.173:5000"
+    env_file:
+      - ./frontend/.env.docker
     ports:
       - "80:80"
 
