@@ -54,8 +54,8 @@ resource "aws_security_group" "kind_cluster_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    from_port   = 3000
-    to_port     = 3000
+    from_port   = 5000
+    to_port     = 5000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -89,28 +89,5 @@ resource "aws_instance" "jenkins_server" {
   user_data_replace_on_change = true
   
 }
-
-# resource "aws_instance" "kind_cluster" {
-#   ami                    = data.aws_ami.ubuntu.id
-#   instance_type          = "t2.large"
-#   subnet_id              = aws_subnet.public_subnet.id
-#   vpc_security_group_ids = [aws_security_group.kind_cluster_sg.id]
-#   key_name               = aws_key_pair.deployer_key.key_name
-#   iam_instance_profile   = data.aws_iam_instance_profile.labInstanceProfile.name
-
-#   root_block_device {
-#     volume_size           = 32
-#     volume_type           = "gp3"
-#     delete_on_termination = true
-#   }
-
-#   tags = { Name = "wanderlust-kind-cluster" }
-
-#   user_data = file("${path.module}/install_docker_kind.sh")
-
-#   user_data_replace_on_change = true
-
-
-# }
 
 
