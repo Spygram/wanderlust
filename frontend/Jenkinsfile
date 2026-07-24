@@ -5,7 +5,7 @@ pipeline {
         // Define your Docker Hub repository and image tags
         IMAGE_REPO = 'spygram' // Replace with your actual Docker Hub username/org
         IMAGE_TAG  = "0.0.${env.BUILD_NUMBER}"    // Uses the Jenkins build number as the unique tag
-        API_PATH = "http://100.53.35.30:5000" // API path for the frontend build
+        API_PATH = "http://3.235.166.63:5000" // API path for the frontend build
     }
 
     stages {

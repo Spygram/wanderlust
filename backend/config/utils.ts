@@ -6,6 +6,9 @@ type TokenExpiry = '15m' | '30m' | '1h' | '2h' | '1d' | '7d' | '30d';
 
 const PORT = process.env.PORT;
 const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_DB_NAME = process.env.MONGODB_DB_NAME;
+const MONGODB_USER = process.env.MONGODB_USER;
+const MONGODB_PASSWORD = process.env.MONGODB_PASSWORD;
 const REDIS_URL = process.env.REDIS_URL;
 const ACCESS_COOKIE_MAXAGE = process.env.ACCESS_COOKIE_MAXAGE;
 const REFRESH_COOKIE_MAXAGE = process.env.REFRESH_COOKIE_MAXAGE;
@@ -25,6 +28,9 @@ function throwError(message: string): never {
 
 export {
   MONGODB_URI,
+  MONGODB_DB_NAME,
+  MONGODB_USER,
+  MONGODB_PASSWORD,
   PORT,
   REDIS_URL,
   ACCESS_COOKIE_MAXAGE,

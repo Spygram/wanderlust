@@ -1,0 +1,30 @@
+- name: ArgoCD setup
+  hosts: vm
+  gather_facts: false
+
+  tasks:
+  - name: create namespace "argocd"
+    ansible.builtin.shell:
+      kubectl create namespace argocd || true
+    tags:
+      - argocd-setup
+
+  - name: Install ArgoCD
+    ansible.builtin.shell:
+      kubectl apply -n argocd --server-side --force-conflicts -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+    tags:
+      - argocd-setup
+
+  - name: configure argocd ingress
+    ansible.builtin.copy:
+      src: ../../configs/argocd-ingress.yaml
+      dest: /home/ubuntu/argocd-ingress.yaml
+      mode: '0644'
+    tags:
+      - argocd-ingress
+
+  - name: apply argocd ingress
+    ansible.builtin.shell:
+      kubectl apply -f /home/ubuntu/argocd-ingress.yaml
+    tags:
+      - argocd-ingress

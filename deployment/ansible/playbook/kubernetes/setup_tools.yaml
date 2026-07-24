@@ -1,0 +1,87 @@
+---
+- name: SETUP KUBERNETES TOOLS
+  hosts: vm
+  become: yes
+  gather_facts: yes
+  tasks:
+    - name: UPDATE APT CACHE
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: INSTALL REQUIRED PACKAGES
+      ansible.builtin.apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - gnupg
+          - socat
+        state: present
+
+    - name: CREATE DIRECTORY FOR DOCKER GPG KEY
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: ADD DOCKER GPG KEY
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        dest: /etc/apt/keyrings/docker.asc
+        mode: '0644'
+
+    - name: ADD DOCKER APT REPOSITORY
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+        filename: docker
+
+    - name: INSTALL DOCKER AND RELATED PACKAGES
+      ansible.builtin.apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+        update_cache: yes
+
+    - name: ENSURE DOCKER IS STARTED AND ENABLED
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: ENSURE USER UBUNTU IS IN DOCKER GROUP
+      ansible.builtin.user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: DOWNLOAD AND INSTALL KIND
+      ansible.builtin.get_url:
+        url: "https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64"
+        dest: /usr/local/bin/kind
+        mode: '0755'
+
+    - name: DOWNLOAD AND INSTALL KUBECTL
+      ansible.builtin.get_url:
+        url: "https://dl.k8s.io/release/v1.35.0/bin/linux/amd64/kubectl"
+        dest: /usr/local/bin/kubectl
+        mode: '0755'
+
+    - name: DOWNLOAD AND INSTALL CLOUD PROVIDER KIND
+      ansible.builtin.get_url:
+        url: "https://github.com/kubernetes-sigs/cloud-provider-kind/releases/download/v0.10.0/cloud-provider-kind_0.10.0_linux_amd64.tar.gz"
+        dest: /home/ubuntu
+        mode: '0755'
+    
+    - name: EXTRACT AND INSTALL CLOUD PROVIDER KIND
+      shell: |
+        tar -xvf cloud-provider-kind_0.10.0_linux_amd64.tar.gz
+        sudo mv cloud-provider-kind /usr/local/bin
+      args:
+        chdir: /home/ubuntu/

@@ -90,4 +90,60 @@ resource "aws_instance" "jenkins_server" {
   
 }
 
+# Public VM with deployment tools (K8s kind cluster, Docker, etc.)
+resource "aws_instance" "deployment-server" {
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = var.instance_type
+  subnet_id              = aws_subnet.public_subnet.id
+  vpc_security_group_ids = [aws_security_group.deploy_server_sg.id]
+  key_name               = aws_key_pair.deployer_key.key_name
+  iam_instance_profile   = data.aws_iam_instance_profile.labInstanceProfile.name
+
+  root_block_device {
+    volume_size           = 32
+    volume_type           = "gp3"
+    delete_on_termination = true
+  }
+
+  tags = { Name = "deployment-server" }
+}
+
+########################################################
+# Provisioners to wait for SSH and run Ansible playbooks
+########################################################
+resource "terraform_data" "wait_for_ssh" {
+  depends_on = [
+    aws_instance.deployment-server
+  ]
+
+  provisioner "local-exec" {
+    command = <<EOT
+      until ssh -o StrictHostKeyChecking=no \
+        -o ConnectTimeout=5 \
+        -i ../ansible/deployer-key.pem \
+        ubuntu@${aws_instance.deployment-server.public_ip} \
+        "echo SSH is ready"
+      do
+        echo "Waiting for SSH..."
+        sleep 10
+      done
+    EOT
+  }
+}
+
+# Handle the Ansible provisioning after SSH is ready
+resource "terraform_data" "run_ansible" {
+  depends_on = [
+    terraform_data.wait_for_ssh
+  ]
+  provisioner "local-exec" {
+    command     = <<EOT
+      ansible-playbook playbook/kubernetes/setup_tools.yaml
+      ansible-playbook playbook/kubernetes/setup_kubernetes.yaml
+      ansible-playbook playbook/kubernetes/setup_configmap_secret.yaml
+      ansible-playbook playbook/ArgoCD/setup_argocd.yaml
+    EOT
+    working_dir = "../terraform/deployment/ansible"
+  }
+}
 
