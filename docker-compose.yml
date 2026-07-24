@@ -2,12 +2,15 @@ services:
   mongodb:
     container_name: mongo
     image: mongo:7.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: dbadmin
+      MONGO_INITDB_ROOT_PASSWORD: "k@thmandu"
     volumes:
       - mongo_data:/data/db
       - ./backend/data/seed.sh:/docker-entrypoint-initdb.d/seed.sh
       - ./backend/data/sample_posts.json:/docker-entrypoint-initdb.d/sample_posts.json
-    ports:
-      - "27017:27017"
+    expose:
+      - "27017"
 
   backend:
     container_name: backend
