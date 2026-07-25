@@ -56,7 +56,7 @@ spec:
               mountPath: /docker-entrypoint-initdb.d/seed.sh
               subPath: seed.sh
             - name: init-scripts
-              mountPath: /docker-entrypoint-initdb.d/sample_post.json
+              mountPath: /docker-entrypoint-initdb.d/sample_posts.json
               subPath: sample_posts.json
           resources:
             requests:
