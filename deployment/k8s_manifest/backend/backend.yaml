@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
       - name: backend
-        image: spygram/backend:latest
+        image: spygram/wanderlust_backend:0.0.10
         ports:
-        - containerPort: 3000
+        - containerPort: 5000
         envFrom:
             - configMapRef:
                 name: backend-config

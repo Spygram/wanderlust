@@ -18,7 +18,7 @@
 
   - name: configure argocd ingress
     ansible.builtin.copy:
-      src: ../../k8s_manifest/argocd-ingress.yaml
+      src: ../../k8s_manifest/configs/argocd-ingress.yaml
       dest: /home/ubuntu/argocd-ingress.yaml
       mode: '0644'
     tags:

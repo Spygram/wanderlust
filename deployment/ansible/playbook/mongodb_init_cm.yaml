@@ -34,7 +34,7 @@
       kubectl create configmap mongodb-init-scripts \
         --namespace=default \
         --from-file=seed.sh=/home/ubuntu/mongo_init_temp/seed.sh \
-        --from-file=sample_post.json=/home/ubuntu/mongo_init_temp/sample_posts.json \
+        --from-file=sample_posts.json=/home/ubuntu/mongo_init_temp/sample_posts.json \
         --dry-run=client -o yaml | kubectl apply -f -
 
   - name: Clean up temporary folder on VM

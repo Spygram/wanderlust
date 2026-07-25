@@ -6,7 +6,7 @@
   tasks:
   - name: COPY NGINX INGRESS CONFIG TO SERVER
     ansible.builtin.copy:
-        src: ../../k8s_manifest/nginx-ingress.yaml
+        src: ../../k8s_manifest/configs/nginx-ingress.yaml
         dest: /home/ubuntu/
 
   - name: INSTALL NGINX INGRESS CONTROLLER ON KUBERNETES
