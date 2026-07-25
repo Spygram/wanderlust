@@ -1,11 +1,11 @@
 ---
-- name: CONFIGURE KIND CLUSTER AND NGINX INGRESS
+- name: CONFIGURE KIND CLUSTER
   hosts: vm
   become: yes
   tasks:
   - name: COPY KIND CONFIG
     ansible.builtin.copy:
-        src: ../../configs/kind-config.yaml
+        src: ./kind-config.yaml
         dest: /home/ubuntu/
 
   - name: CHECK KIND CLUSTER
@@ -22,16 +22,6 @@
   - name: EXPORT KUBECONFIG
     shell: kind export kubeconfig --name kind
     become_user: ubuntu
-
-  - name: COPY NGINX INGRESS CONFIG TO SERVER
-    ansible.builtin.copy:
-        src: ../../configs/nginx-ingress.yaml
-        dest: /home/ubuntu/
-
-  - name: INSTALL NGINX INGRESS CONTROLLER ON KUBERNETES
-    shell: kubectl apply -f nginx-ingress.yaml
-    args:
-      chdir: /home/ubuntu/
 
   
 

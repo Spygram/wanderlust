@@ -29,9 +29,9 @@ terraform {
   }
 }
 
-# provider "cloudflare" {
-#   api_token = "Get_it_from_Cloudflare_account"
-# }
+provider "cloudflare" {
+  api_token = var.cloudflare_api_token
+}
 
 
 provider "aws" {

@@ -1,0 +1,62 @@
+---
+- name: CONFIGMAP FOR MONGO INITDB SCRIPTS
+  hosts: vm
+  gather_facts: false
+  become: yes
+
+  tasks:
+  - name: CONFIGMAP FOR MONGO INITDB SCRIPTS
+  hosts: vm
+  gather_facts: false
+  # No become: true needed here, runs entirely as the default non-root user (e.g., ubuntu)
+
+  tasks:
+  - name: Create temporary directory for init files on VM
+    ansible.builtin.file:
+      path: /home/ubuntu/mongo_init_temp
+      state: directory
+      mode: '0755'
+
+  - name: Copy seed.sh to remote VM
+    ansible.builtin.copy:
+      src: "../../../backend/data/seed.sh"
+      dest: "/home/ubuntu/mongo_init_temp/seed.sh"
+      mode: '0755'
+
+  - name: Copy sample_posts.json to remote VM
+    ansible.builtin.copy:
+      src: "../../../backend/data/sample_posts.json"
+      dest: "/home/ubuntu/mongo_init_temp/sample_posts.json"
+      mode: '0644'
+
+  - name: Create or update ConfigMap via kubectl on the VM
+    ansible.builtin.shell: |
+      kubectl create configmap mongodb-init-scripts \
+        --namespace=default \
+        --from-file=seed.sh=/home/ubuntu/mongo_init_temp/seed.sh \
+        --from-file=sample_post.json=/home/ubuntu/mongo_init_temp/sample_posts.json \
+        --dry-run=client -o yaml | kubectl apply -f -
+
+  - name: Clean up temporary folder on VM
+    ansible.builtin.file:
+      path: /home/ubuntu/mongo_init_temp
+      state: absent
+
+  # - name: Ensure pip3 and kubernetes python package are installed
+  #   ansible.builtin.apt:
+  #     name: kubernetes
+  #     state: present
+  #     update_cache: yes
+
+  # - name: Create MongoDB Init ConfigMap from files
+  #   kubernetes.core.k8s:
+  #     state: present
+  #     definition:
+  #       apiVersion: v1
+  #       kind: ConfigMap
+  #       metadata:
+  #         name: mongodb-init-scripts
+  #         namespace: default
+  #       data:
+  #         seed.sh: "{{ lookup('file', '../../../backend/data/seed.sh') }}"
+  #         sample_post.json: "{{ lookup('file', '../../../backend/data/sample_posts.json') }}"

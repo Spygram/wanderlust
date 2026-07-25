@@ -37,3 +37,8 @@ frontend-build.log
 coverage/
 
 # Husky (keep .husky/ itself, ignore only local overrides if any)
+
+terraform.tfstate
+secret.yaml
+inventory*
+terraform/variables.tf

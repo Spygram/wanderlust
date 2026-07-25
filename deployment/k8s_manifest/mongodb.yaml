@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  labels:
+    app: mongodb
+spec:
+  ports:
+    - port: 27017
+      targetPort: 27017
+      name: mongodb
+  clusterIP: None # Headless service for StatefulSet identity
+  selector:
+    app: mongodb
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  labels:
+    app: mongodb
+spec:
+  serviceName: mongodb
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:7.0
+          ports:
+            - containerPort: 27017
+              name: mongodb
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: MONGODB_USER
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: MONGODB_PASSWORD
+          volumeMounts:
+            - name: mongodb-data
+              mountPath: /data/db
+            # Mount seed files into docker-entrypoint-initdb.d
+            - name: init-scripts
+              mountPath: /docker-entrypoint-initdb.d/seed.sh
+              subPath: seed.sh
+            - name: init-scripts
+              mountPath: /docker-entrypoint-initdb.d/sample_post.json
+              subPath: sample_post.json
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: init-scripts
+          configMap:
+            name: mongodb-init-scripts
+            defaultMode: 0777 # Grants execute permissions to seed.sh
+  volumeClaimTemplates:
+    - metadata:
+        name: mongodb-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi

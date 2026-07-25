@@ -1,0 +1,15 @@
+---
+- name: NGINX INGRESS CONTROLLER setup
+  hosts: vm
+  gather_facts: false
+
+  tasks:
+  - name: COPY NGINX INGRESS CONFIG TO SERVER
+    ansible.builtin.copy:
+        src: ../../k8s_manifest/nginx-ingress.yaml
+        dest: /home/ubuntu/
+
+  - name: INSTALL NGINX INGRESS CONTROLLER ON KUBERNETES
+    shell: kubectl apply -f nginx-ingress.yaml
+    args:
+      chdir: /home/ubuntu/

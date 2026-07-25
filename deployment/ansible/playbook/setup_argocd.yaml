@@ -1,3 +1,4 @@
+---
 - name: ArgoCD setup
   hosts: vm
   gather_facts: false
@@ -17,7 +18,7 @@
 
   - name: configure argocd ingress
     ansible.builtin.copy:
-      src: ../../configs/argocd-ingress.yaml
+      src: ../../k8s_manifest/argocd-ingress.yaml
       dest: /home/ubuntu/argocd-ingress.yaml
       mode: '0644'
     tags:
