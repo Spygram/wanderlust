@@ -57,7 +57,7 @@ spec:
               subPath: seed.sh
             - name: init-scripts
               mountPath: /docker-entrypoint-initdb.d/sample_post.json
-              subPath: sample_post.json
+              subPath: sample_posts.json
           resources:
             requests:
               memory: "256Mi"
