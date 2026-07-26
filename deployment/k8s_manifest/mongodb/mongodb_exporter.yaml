@@ -31,3 +31,22 @@ spec:
   selector: { app: mongodb-exporter }
   ports:
     - port: 9216
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mongodb-exporter-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: mongoexporter.sujandongol.com.np 
+    http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: mongodb-exporter
+            port:
+              number: 9216    
