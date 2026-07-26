@@ -1,0 +1,63 @@
+---
+- name: INSTALL KUBE PROMETHEUS STACK
+  hosts: vm
+  become: yes
+
+  vars:
+    monitoring_namespace: monitoring
+
+  tasks:
+
+    - name: CHECK HELM
+      shell: helm version --short
+      register: helm_check
+      ignore_errors: yes
+      changed_when: false
+
+    - name: DOWNLOAD HELM INSTALLER
+      get_url:
+        url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+        dest: /tmp/get_helm.sh
+        mode: '0755'
+      when: helm_check.rc != 0
+
+    - name: INSTALL HELM
+      shell: /tmp/get_helm.sh
+      when: helm_check.rc != 0
+
+    - name: ADD PROMETHEUS REPOSITORY
+      shell: |
+        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+      register: repo_add
+      failed_when: false
+      changed_when: "'already exists' not in repo_add.stderr"
+
+    - name: UPDATE HELM REPOSITORIES
+      shell: helm repo update
+
+    - name: CHECK MONITORING NAMESPACE
+      shell: kubectl get namespace {{ monitoring_namespace }}
+      register: monitoring_ns
+      ignore_errors: yes
+      changed_when: false
+      become_user: ubuntu
+
+    - name: CREATE MONITORING NAMESPACE
+      shell: kubectl create namespace {{ monitoring_namespace }}
+      when: monitoring_ns.rc != 0
+      become_user: ubuntu
+
+    - name: CHECK IF KUBE PROMETHEUS STACK EXISTS
+      shell: helm list -n {{ monitoring_namespace }} | grep monitoring
+      register: monitoring_release
+      ignore_errors: yes
+      changed_when: false
+      become_user: ubuntu
+
+    - name: INSTALL KUBE PROMETHEUS STACK
+      shell: >
+        helm install monitoring
+        prometheus-community/kube-prometheus-stack
+        --namespace {{ monitoring_namespace }}
+      when: monitoring_release.rc != 0
+      become_user: ubuntu
