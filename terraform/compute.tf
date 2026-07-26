@@ -142,9 +142,10 @@ resource "terraform_data" "run_ansible" {
       ansible-playbook playbook/setup_tools.yaml
       ansible-playbook playbook/setup_kubernetes.yaml
       ansible-playbook playbook/setup_ingress_controller.yaml
-      ansible-playbook playbook/setup_argocd.yaml
       ansible-playbook playbook/mongodb_init_cm.yaml
-
+      ansible-playbook playbook/setup_argocd.yaml
+      ansible-playbook playbook/setup_kube_prometheus_stack.yaml      
+      
     EOT
     working_dir = "../deployment/ansible"
   }

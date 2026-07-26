@@ -20,7 +20,7 @@ async function startServer() {
 
     server = app.listen(port, () => {
       console.log(`✅ Server running on port ${port}`);
-      console.log(`🔗 Backend URL: http://localhost:${port}`);
+      console.log(`🔗 Backend URL: ${process.env.BACKEND_URL || `http://localhost:${port}`}`);
     });
 
     return server;
