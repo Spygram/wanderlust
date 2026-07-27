@@ -23,3 +23,30 @@ resource "cloudflare_dns_record" "argocd_dns_record" {
   content = aws_instance.deployment-server.public_ip
   proxied = true
 }
+
+resource "cloudflare_dns_record" "prometheus_dns_record" {
+  zone_id = var.cloudflare_zone_id
+  name    = "prometheus.sujandongol.com.np"
+  ttl     = 1
+  type    = "A"
+  content = aws_instance.deployment-server.public_ip
+  proxied = true
+}
+
+resource "cloudflare_dns_record" "grafana_dns_record" {
+  zone_id = var.cloudflare_zone_id
+  name    = "grafana.sujandongol.com.np"
+  ttl     = 1
+  type    = "A"
+  content = aws_instance.deployment-server.public_ip
+  proxied = true
+}
+
+resource "cloudflare_dns_record" "alertmanager_dns_record" {
+  zone_id = var.cloudflare_zone_id
+  name    = "alertmanager.sujandongol.com.np"
+  ttl     = 1
+  type    = "A"
+  content = aws_instance.deployment-server.public_ip
+  proxied = true
+}

@@ -1,13 +1,6 @@
 # Non-secret runtime config for the backend.
-#
 # Key names here MUST match `process.env.*` reads in backend/config/utils.ts.
-# The old configmap.yaml.j2 shipped DB_HOST / DB_PORT / DB_NAME, none of which
-# the application ever reads.
 #
-# NOTE: MONGODB_URI has no credentials in it. The backend builds its connection
-# from MONGODB_URI alone (config/db.ts calls mongoose.connect(MONGODB_URI)), so
-# if you enable Mongo auth you must put the full URI in the Secret instead and
-# drop it from here. See README.
 apiVersion: v1
 kind: ConfigMap
 metadata:

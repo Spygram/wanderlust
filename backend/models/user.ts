@@ -81,6 +81,8 @@ const userSchema = new Schema<UserObject>(
     googleId: {
       type: String,
       unique: true,
+      sparse: true, // <--- 1. Ignore null/missing values in unique index
+      default: undefined, // <--- 2. Prevent Mongoose from setting null by default
       required: false,
     },
   },
