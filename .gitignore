@@ -42,3 +42,6 @@ terraform.tfstate
 secret.yaml
 inventory*
 terraform/variables.tf
+
+
+README.md.bk
