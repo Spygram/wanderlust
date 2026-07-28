@@ -2,6 +2,8 @@
 
 > A production-grade, highly available microservices application deployed on AWS EKS using Infrastructure as Code (IaC) and GitOps principles.
 
+📖 **[Read the full Project Documentation](./PROJECT_DOCUMENTATION.md)** — architecture, API reference, Terraform/Ansible/Kubernetes deep-dives, CI/CD & GitOps pipelines, and security practices.
+
 ![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 ![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)
