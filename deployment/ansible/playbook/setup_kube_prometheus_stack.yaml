@@ -26,6 +26,7 @@
       when: helm_check.rc != 0
 
     - name: ADD PROMETHEUS REPOSITORY
+      become_user: ubuntu
       shell: |
         helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
       register: repo_add
@@ -33,6 +34,7 @@
       changed_when: "'already exists' not in repo_add.stderr"
 
     - name: UPDATE HELM REPOSITORIES
+      become_user: ubuntu
       shell: helm repo update
 
     - name: CHECK MONITORING NAMESPACE
